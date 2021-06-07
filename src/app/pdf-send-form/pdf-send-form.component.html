@@ -1,0 +1,13 @@
+<div class="container rounded">
+  <form [formGroup]="form">
+    <input type="file" accept="application/pdf" formControlName="files" multiple hidden (change)="onSelect($event)" #file>
+    <button (click)="file.click()">Select pdf files</button>
+    <ul *ngFor="let item of (selectedFiles | async)">
+      <li>{{item}}</li>
+    </ul>
+    <button (click)="onSubmit()">Send</button>
+  </form>
+</div>
+<div class="container">
+
+</div>
