@@ -2,9 +2,7 @@
   <form [formGroup]="form">
     <input type="file" accept="application/pdf" formControlName="files" multiple hidden (change)="onSelect($event)" #file>
     <button (click)="file.click()">Select pdf files</button>
-    <ul *ngFor="let item of (selectedFiles | async)">
-      <li>{{item}}</li>
-    </ul>
+    <ng-container #container></ng-container>
     <button (click)="onSubmit()">Send</button>
   </form>
 </div>
@@ -13,3 +11,4 @@
     <li><a [href]="item">{{item}}</a></li>
   </ul>
 </div>
+

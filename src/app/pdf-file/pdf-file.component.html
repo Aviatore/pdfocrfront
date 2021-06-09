@@ -1,0 +1,11 @@
+<div class="container border border-secondary rounded p-2 my-1">
+  <div class="my-2">
+    <mat-progress-bar mode="determinate" [value]="fileData.progress$ | async"></mat-progress-bar>
+  </div>
+
+  <img src="assets/icons/pdf_icon.png" alt="pdf_icon"><span id="fileName">{{fileData.fileName}}</span>
+  <div class="my-2">
+    <button (click)="onClose.emit()">Remove</button>
+  </div>
+
+</div>
