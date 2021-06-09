@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {BehaviorSubject, from, Observable, of} from "rxjs";
 import {map} from "rxjs/operators";
 import {OcrService} from "../services/ocr.service";
+import {SignalRService} from "../services/signal-r.service";
 
 @Component({
   selector: 'app-pdf-send-form',
@@ -15,8 +16,11 @@ export class PdfSendFormComponent implements OnInit {
   public selectedFiles2: Observable<string[]>;
   public submitted = false;
   public formData: FormData;
+  public signalRS: SignalRService;
+
   constructor(private fb: FormBuilder,
-              private ocr: OcrService) { }
+              private ocr: OcrService,
+              private signalR: SignalRService) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -29,10 +33,15 @@ export class PdfSendFormComponent implements OnInit {
     this.selectedFiles = new BehaviorSubject<string[]>([]);
 
     this.formData = new FormData();
+
+    this.signalR.connect();
+
+    this.signalRS = this.signalR;
   }
 
   onSubmit(): void {
     console.log("Sending request");
+
     if (this.form.invalid) {
       this.submitted = true;
 
@@ -42,11 +51,13 @@ export class PdfSendFormComponent implements OnInit {
     } else {
       this.submitted = false;
 
-      this.ocr.SendPdfFiles(this.formData).subscribe({
-        next: result => {
-          console.log(`Response body: ${JSON.stringify(result.body)}`);
-        }
-      });
+      if (this.signalR.connectionId !== undefined && this.signalR.connectionId !== null) {
+        this.ocr.SendPdfFiles(this.formData, this.signalR.connectionId).subscribe({
+          next: result => {
+            console.log(`Response body: ${JSON.stringify(result.body)}`);
+          }
+        });
+      }
     }
   }
 

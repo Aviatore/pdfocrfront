@@ -9,5 +9,7 @@
   </form>
 </div>
 <div class="container">
-
+  <ul *ngFor="let item of (signalRS.convertedFiles | async)">
+    <li><a [href]="item">{{item}}</a></li>
+  </ul>
 </div>

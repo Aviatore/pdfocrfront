@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpResponse} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse, HttpParams, HttpResponse} from "@angular/common/http";
 import {Observable, ObservableInput} from "rxjs";
 import {ErrorResponse} from "../interfaces/errorResponse";
 import {Urls} from "../urls";
@@ -11,8 +11,9 @@ export class OcrService {
   errorResponse: ErrorResponse;
   constructor(private httpClient: HttpClient) { }
 
-  SendPdfFiles(files: FormData): Observable<any> {
+  SendPdfFiles(files: FormData, connectionId: string): Observable<any> {
     return this.httpClient.post<HttpResponse<Observable<ErrorResponse>>>(Urls.SendFiles, files, {
+      params: new HttpParams().set('connectionId', connectionId),
       observe: 'response',
       responseType: 'json'
     })
