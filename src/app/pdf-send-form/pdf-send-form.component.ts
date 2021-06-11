@@ -37,6 +37,7 @@ export class PdfSendFormComponent implements OnInit {
   @ViewChild('container', {read: ViewContainerRef}) container: ViewContainerRef;
   public fileComponents: ComponentRef<PdfFileComponent>[] = [];
   @ViewChild('file', {read: ElementRef}) file: ElementRef;
+  public parsing = false;
 
   constructor(private fb: FormBuilder,
               private ocr: OcrService,
@@ -57,6 +58,7 @@ export class PdfSendFormComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
+    this.parsing = true;
     console.log("Sending request");
 
     if (this.form.invalid) {
@@ -80,9 +82,11 @@ export class PdfSendFormComponent implements OnInit {
             }
           });
         });*/
+
         this.sendSynchronously(0);
       }
     }
+
   }
 
   sendSynchronously(index: number): void {
@@ -98,6 +102,8 @@ export class PdfSendFormComponent implements OnInit {
             if (index < this.FilesContainer.length - 1 ) {
               index++;
               return this.sendSynchronously(index);
+            } else {
+              this.parsing = false;
             }
           }
         }
@@ -148,5 +154,13 @@ export class PdfSendFormComponent implements OnInit {
     this.fileComponents[index].destroy();
     this.fileComponents.splice(index, 1);
     this.FilesContainer.splice(index, 1);
+  }
+
+  onClear(): void {
+    for (let i = this.fileComponents.length - 1; i >= 0; i--) {
+      this.fileComponents[i].destroy();
+      this.fileComponents.splice(i, 1);
+      this.FilesContainer.splice(i, 1);
+    }
   }
 }

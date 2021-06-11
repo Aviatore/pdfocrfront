@@ -20,6 +20,20 @@
   background-color: #2c6cd4;
 }
 
-.mat-flat-button {
+.mat-flat-button#send-button {
   background-color: #0b5ed7;
+}
+
+.mat-flat-button#clear-button {
+  background-color: #d74c0b;
+}
+
+.connection-status-on {
+  color: #12ff00;
+  font-size: 0.8em;
+}
+
+.connection-status-off {
+  color: #ff0000;
+  font-size: 0.8em;
 }

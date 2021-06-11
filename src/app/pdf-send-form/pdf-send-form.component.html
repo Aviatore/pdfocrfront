@@ -1,7 +1,9 @@
 <div class="d-flex flex-column justify-content-center">
   <div class="container border border-secondary rounded p-0 my-4">
     <div id="header" class="p-2">
-      PDF converter
+      <span>PDF converter</span>
+      <span *ngIf="signalRS.connected" class="connection-status-on float-right">Connected</span>
+      <span *ngIf="!signalRS.connected" class="connection-status-off float-right">Disconnected</span>
     </div>
 
     <div class="container p-0 my-4 px-3">
@@ -13,7 +15,9 @@
         <input type="file" accept="application/pdf" formControlName="files" multiple hidden (change)="onSelect($event)" #file>
         <!--<button (click)="file.click()">Select pdf files</button>-->
         <ng-container #container></ng-container>
-        <button mat-flat-button color="primary" (click)="onSubmit()" *ngIf="FilesContainer.length > 0">Send</button>
+        <span [matTooltip]="!signalRS.connected ? 'You must connect to the server' : 'Send PDF files'" matTooltipPosition="left"><button id="send-button" mat-flat-button (click)="onSubmit()" *ngIf="FilesContainer.length > 0" [disabled]="parsing || !signalRS.connected" >Send</button></span>
+        <span matTooltip="Clear file queue" matTooltipPosition="right" class="float-right"><button id="clear-button" mat-flat-button (click)="onClear()" *ngIf="FilesContainer.length > 0" >Clear</button></span>
+        <span></span>
       </form>
     </div>
   </div>

@@ -14,6 +14,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import {MatButtonModule} from "@angular/material/button";
     HttpClientModule,
     MatButtonModule,
     MatIconModule,
+    MatTooltipModule,
     NgbModule,
     AppRoutingModule
   ],
