@@ -1,14 +1,20 @@
-<div class="container rounded">
-  <form [formGroup]="form">
-    <input type="file" accept="application/pdf" formControlName="files" multiple hidden (change)="onSelect($event)" #file>
-    <button (click)="file.click()">Select pdf files</button>
-    <ng-container #container></ng-container>
-    <button (click)="onSubmit()">Send</button>
-  </form>
-</div>
-<div class="container">
-  <ul *ngFor="let item of (signalRS.convertedFiles | async)">
-    <li><a [href]="item">{{item}}</a></li>
-  </ul>
-</div>
+<div class="d-flex flex-column justify-content-center">
+  <div class="container border border-secondary rounded p-0 my-4">
+    <div id="header" class="p-2">
+      PDF converter
+    </div>
 
+    <div class="container p-0 my-4 px-3">
+      <div class="rounded" id="big-button" (click)="file.click()">
+        Select PDF files
+      </div>
+
+      <form [formGroup]="form">
+        <input type="file" accept="application/pdf" formControlName="files" multiple hidden (change)="onSelect($event)" #file>
+        <!--<button (click)="file.click()">Select pdf files</button>-->
+        <ng-container #container></ng-container>
+        <button mat-flat-button color="primary" (click)="onSubmit()" *ngIf="FilesContainer.length > 0">Send</button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as sr from '@aspnet/signalr';
-import {BehaviorSubject, from, Observable, of} from "rxjs";
+import {BehaviorSubject, from, Observable, of, Subject} from "rxjs";
 import {delay} from "rxjs/operators";
 
 @Injectable({
@@ -8,8 +8,8 @@ import {delay} from "rxjs/operators";
 })
 export class SignalRService {
   connection: sr.HubConnection;
-  private _convertedFiles: string[];
-  convertedFiles: BehaviorSubject<string[]>;
+  private _convertedFiles: string;
+  convertedFiles: Subject<string>;
   public connectionId: string;
 
   constructor() {
@@ -17,8 +17,8 @@ export class SignalRService {
       .withUrl('https://localhost:5001/notify')
       .build();
 
-    this.convertedFiles = new BehaviorSubject<string[]>([]);
-    this._convertedFiles = [];
+    this.convertedFiles = new Subject();
+    this._convertedFiles = '';
   }
 
   connect(): void {
@@ -32,8 +32,8 @@ export class SignalRService {
   listenToChanges(): void {
     this.connection.on('BroadcastMessage', data => {
       console.log(`data: ${data}`);
-      this._convertedFiles.push(data);
-      this.convertedFiles.next(this._convertedFiles);
+      // this._convertedFiles.push(data);
+      this.convertedFiles.next(data);
     })
   }
 

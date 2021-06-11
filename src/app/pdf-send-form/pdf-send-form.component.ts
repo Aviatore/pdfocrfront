@@ -81,7 +81,7 @@ export class PdfSendFormComponent implements OnInit {
         } else if (result instanceof HttpResponse) {
           console.log(`Finished loading: ${this.FilesContainer[index].fileName}`);
 
-          if (index < this.FilesContainer.length - 1) {
+          if (index < this.FilesContainer.length - 1 ) {
             index++;
             this.sendSynchronously(index);
           }

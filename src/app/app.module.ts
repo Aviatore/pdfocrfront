@@ -12,6 +12,8 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
 import { PdfFileComponent } from './pdf-file/pdf-file.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {MatIconModule} from "@angular/material/icon";
+import {MatButtonModule} from "@angular/material/button";
 
 @NgModule({
   declarations: [
@@ -27,8 +29,10 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
     MatFormFieldModule,
     MatInputModule,
     HttpClientModule,
-    AppRoutingModule,
-    NgbModule
+    MatButtonModule,
+    MatIconModule,
+    NgbModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
