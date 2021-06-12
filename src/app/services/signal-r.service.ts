@@ -39,7 +39,7 @@ export class SignalRService {
 
   listenToChanges(): void {
     this.connection.on('BroadcastMessage', data => {
-      console.log(`data: ${data}`);
+      // console.log(`data: ${data}`);
       // this._convertedFiles.push(data);
       this.convertedFiles.next(data);
     })
@@ -56,7 +56,7 @@ export class SignalRService {
   getConnectionId(): void {
     this.connection.invoke("GetConnectionId")
       .then(value => {
-        console.log(`ConnectionId: ${value}`);
+        // console.log(`ConnectionId: ${value}`);
         this.connectionId = value;
       })
       .catch(err => console.log(`Error while getting connectionId: ${err}`));

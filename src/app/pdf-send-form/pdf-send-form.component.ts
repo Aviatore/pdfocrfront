@@ -64,9 +64,9 @@ export class PdfSendFormComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
-    console.log(`Number of files: ${this.FilesContainer.length}`);
+    // console.log(`Number of files: ${this.FilesContainer.length}`);
     this.parsing = true;
-    console.log("Sending request");
+    // console.log("Sending request");
 
     if (this.form.invalid) {
       this.submitted = true;
@@ -103,9 +103,9 @@ export class PdfSendFormComponent implements OnInit {
         next: result => {
           if (result.type === HttpEventType.UploadProgress) {
             this.FilesContainer[index].progress$.next(Math.round(100 * result.loaded / result.total));
-            console.log(`${result.loaded} / ${result.total}`);
+            // console.log(`${result.loaded} / ${result.total}`);
             if (result.loaded === result.total) {
-              console.log(`Finished loading: ${this.FilesContainer[index].fileName}`);
+              // console.log(`Finished loading: ${this.FilesContainer[index].fileName}`);
               this.FilesContainer[index].parsingStarted = true;
             }
           } else if (result instanceof HttpResponse) {
@@ -143,7 +143,7 @@ export class PdfSendFormComponent implements OnInit {
 
   onSelect(event): void {
     if (event.target.files && event.target.files.length > 0) {
-      console.log(`Files count: ${Object.keys(event.target.files).length}`);
+      // console.log(`Files count: ${Object.keys(event.target.files).length}`);
       let index = 0;
       Object.keys(event.target.files).forEach(key => {
         const tmp: FilesAndProgress = {
@@ -178,7 +178,7 @@ export class PdfSendFormComponent implements OnInit {
   }
 
   onClosePdfFile(component: ComponentRef<PdfFileComponent>): void {
-    console.log(`Components count: ${this.fileComponents.length}`);
+    // console.log(`Components count: ${this.fileComponents.length}`);
     const index = this.fileComponents.indexOf(component);
     this.fileComponents[index].destroy();
     this.fileComponents.splice(index, 1);
@@ -207,7 +207,7 @@ export class PdfSendFormComponent implements OnInit {
         })
       })
       .catch(err => {
-        console.log(`Err: ${err}`);
+        // console.log(`Err: ${err}`);
         this.snackBar.openFromComponent(CustomSnackBarComponent, {
           duration: 3000,
           panelClass: 'snack-bar-red',

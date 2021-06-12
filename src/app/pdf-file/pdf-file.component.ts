@@ -26,7 +26,7 @@ export class PdfFileComponent implements OnInit {
           this.fileData.url = valueSplitted.join(':');
           this.fileData.parsed = true;
         } else {
-          console.log(`second param: ${value.split(':')[1]}`);
+          // console.log(`second param: ${value.split(':')[1]}`);
         }
       }
     })
