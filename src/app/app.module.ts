@@ -15,12 +15,15 @@ import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {MatTooltipModule} from "@angular/material/tooltip";
+import { CustomSnackBarComponent } from './custom-snack-bar/custom-snack-bar.component';
+import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 
 @NgModule({
   declarations: [
     AppComponent,
     PdfSendFormComponent,
-    PdfFileComponent
+    PdfFileComponent,
+    CustomSnackBarComponent
   ],
   imports: [
     BrowserModule,
@@ -32,6 +35,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
     HttpClientModule,
     MatButtonModule,
     MatIconModule,
+    MatSnackBarModule,
     MatTooltipModule,
     NgbModule,
     AppRoutingModule

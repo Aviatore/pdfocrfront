@@ -15,7 +15,7 @@ export class SignalRService {
 
   constructor() {
     this.connection = new sr.HubConnectionBuilder()
-      .withUrl('https://localhost:5001/notify')
+      .withUrl('https://localhost:5001/notify') // or 'back:5000/notify' where 'back' is the name of docker image
       .build();
 
     this.connection.onclose(() => {
@@ -60,5 +60,9 @@ export class SignalRService {
         this.connectionId = value;
       })
       .catch(err => console.log(`Error while getting connectionId: ${err}`));
+  }
+
+  stopConversion(): Promise<any> {
+    return this.connection.invoke("StopConversion");
   }
 }

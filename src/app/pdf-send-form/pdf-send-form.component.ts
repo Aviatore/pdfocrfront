@@ -15,13 +15,17 @@ import {SignalRService} from "../services/signal-r.service";
 import {PdfFileComponent} from "../pdf-file/pdf-file.component";
 import {HttpEventType, HttpResponse} from "@angular/common/http";
 import {waitForAsync} from "@angular/core/testing";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {CustomSnackBarComponent} from "../custom-snack-bar/custom-snack-bar.component";
 
 export interface FilesAndProgress {
   fileName: string,
   file: File,
   progress$: BehaviorSubject<number>,
   index: number,
-  parsed: boolean
+  parsingStarted: boolean,
+  parsed: boolean,
+  url: string
 }
 
 @Component({
@@ -38,11 +42,13 @@ export class PdfSendFormComponent implements OnInit {
   public fileComponents: ComponentRef<PdfFileComponent>[] = [];
   @ViewChild('file', {read: ElementRef}) file: ElementRef;
   public parsing = false;
+  private stopParsing = false;
 
   constructor(private fb: FormBuilder,
               private ocr: OcrService,
               private signalR: SignalRService,
-              private cfr: ComponentFactoryResolver) { }
+              private cfr: ComponentFactoryResolver,
+              private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -58,6 +64,7 @@ export class PdfSendFormComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
+    console.log(`Number of files: ${this.FilesContainer.length}`);
     this.parsing = true;
     console.log("Sending request");
 
@@ -96,13 +103,33 @@ export class PdfSendFormComponent implements OnInit {
         next: result => {
           if (result.type === HttpEventType.UploadProgress) {
             this.FilesContainer[index].progress$.next(Math.round(100 * result.loaded / result.total));
+            console.log(`${result.loaded} / ${result.total}`);
+            if (result.loaded === result.total) {
+              console.log(`Finished loading: ${this.FilesContainer[index].fileName}`);
+              this.FilesContainer[index].parsingStarted = true;
+            }
           } else if (result instanceof HttpResponse) {
-            console.log(`Finished loading: ${this.FilesContainer[index].fileName}`);
-
             if (index < this.FilesContainer.length - 1 ) {
-              index++;
-              return this.sendSynchronously(index);
+              if (this.stopParsing) {
+                this.stopParsing = false;
+                this.parsing = false;
+                this.FilesContainer[index].progress$.next(0);
+                this.FilesContainer[index].parsed = false;
+                this.FilesContainer[index].url = null;
+                this.FilesContainer[index].parsingStarted = false;
+                return;
+              } else {
+                index++;
+                return this.sendSynchronously(index);
+              }
             } else {
+              if (this.stopParsing) {
+                this.FilesContainer[index].progress$.next(0);
+                this.FilesContainer[index].parsed = false;
+                this.FilesContainer[index].url = null;
+                this.FilesContainer[index].parsingStarted = false;
+              }
+              this.stopParsing = false;
               this.parsing = false;
             }
           }
@@ -124,7 +151,9 @@ export class PdfSendFormComponent implements OnInit {
           progress$: new BehaviorSubject<number>(0),
           file: event.target.files[key],
           index: index,
-          parsed: false
+          parsingStarted: false,
+          parsed: false,
+          url: null
         }
 
         this.FilesContainer.push(tmp);
@@ -162,5 +191,30 @@ export class PdfSendFormComponent implements OnInit {
       this.fileComponents.splice(i, 1);
       this.FilesContainer.splice(i, 1);
     }
+  }
+
+  onStop(): void {
+    this.stopParsing = true;
+    this.parsing = false;
+    this.signalRS.stopConversion()
+      .then(value => {
+        this.snackBar.openFromComponent(CustomSnackBarComponent, {
+          duration: 3000,
+          panelClass: 'snack-bar-green',
+          data: {
+            message: 'PDF conversion was cancelled'
+          }
+        })
+      })
+      .catch(err => {
+        console.log(`Err: ${err}`);
+        this.snackBar.openFromComponent(CustomSnackBarComponent, {
+          duration: 3000,
+          panelClass: 'snack-bar-red',
+          data: {
+            message: 'Cancellation did not succeed'
+          }
+        })
+      })
   }
 }

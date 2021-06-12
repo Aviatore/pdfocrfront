@@ -31,3 +31,7 @@ img {
 .container:hover .close-button {
   visibility: visible;
 }
+
+#converting-msg {
+  color: #d7740b;
+}
