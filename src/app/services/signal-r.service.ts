@@ -15,7 +15,8 @@ export class SignalRService {
 
   constructor() {
     this.connection = new sr.HubConnectionBuilder()
-      .withUrl('https://localhost:5001/notify') // or 'back:5000/notify' where 'back' is the name of docker image
+      //.withUrl('http://localhost:5000/notify') // or 'back:5000/notify' where 'back' is the name of docker image
+      .withUrl('http://localhost:5000/notify')
       .build();
 
     this.connection.onclose(() => {

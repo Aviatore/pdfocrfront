@@ -43,6 +43,7 @@ export class PdfSendFormComponent implements OnInit {
   @ViewChild('file', {read: ElementRef}) file: ElementRef;
   public parsing = false;
   private stopParsing = false;
+  public areAllParsed = false;
 
   constructor(private fb: FormBuilder,
               private ocr: OcrService,
@@ -99,6 +100,7 @@ export class PdfSendFormComponent implements OnInit {
   sendSynchronously(index: number): void {
     if (!this.FilesContainer[index].parsed)
     {
+      this.areAllParsed = false;
       this.ocr.SendPdfFile(this.FilesContainer[index].file, this.signalR.connectionId).subscribe({
         next: result => {
           if (result.type === HttpEventType.UploadProgress) {
@@ -119,6 +121,7 @@ export class PdfSendFormComponent implements OnInit {
                 this.FilesContainer[index].parsingStarted = false;
                 return;
               } else {
+                this.areAllParsed = true;
                 index++;
                 return this.sendSynchronously(index);
               }
@@ -128,6 +131,8 @@ export class PdfSendFormComponent implements OnInit {
                 this.FilesContainer[index].parsed = false;
                 this.FilesContainer[index].url = null;
                 this.FilesContainer[index].parsingStarted = false;
+              } else {
+                this.areAllParsed = true;
               }
               this.stopParsing = false;
               this.parsing = false;
@@ -139,13 +144,29 @@ export class PdfSendFormComponent implements OnInit {
       index++;
       return this.sendSynchronously(index);
     }
+
+    // this.areAllParsed = this.isAllParsed();
+  }
+
+  isAllParsed(): boolean {
+    this.FilesContainer.forEach(file => {
+      console.log(`File parse status: ${file.parsed}`);
+      if (!file.parsed) {
+        console.log('Returning false');
+        return false;
+      }
+    });
+
+    return true;
   }
 
   onSelect(event): void {
     if (event.target.files && event.target.files.length > 0) {
+      this.areAllParsed = false;
       // console.log(`Files count: ${Object.keys(event.target.files).length}`);
       let index = 0;
       Object.keys(event.target.files).forEach(key => {
+        console.log('loading ...');
         const tmp: FilesAndProgress = {
           fileName: event.target.files[key].name,
           progress$: new BehaviorSubject<number>(0),
@@ -174,6 +195,9 @@ export class PdfSendFormComponent implements OnInit {
       });
 
       this.file.nativeElement.value = null;
+
+      //this.areAllParsed = this.isAllParsed();
+      //console.log(`Real status: ${this.areAllParsed}`);
     }
   }
 
@@ -183,6 +207,7 @@ export class PdfSendFormComponent implements OnInit {
     this.fileComponents[index].destroy();
     this.fileComponents.splice(index, 1);
     this.FilesContainer.splice(index, 1);
+    //this.areAllParsed = this.isAllParsed();
   }
 
   onClear(): void {

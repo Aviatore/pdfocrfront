@@ -24,7 +24,7 @@
   background-color: #0b5ed7;
 }
 
-.mat-flat-button#clear-button {
+.mat-flat-button#clear-button, .mat-flat-button#cancel-button {
   background-color: #d74c0b;
 }
 
