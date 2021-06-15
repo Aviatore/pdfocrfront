@@ -1,14 +1,14 @@
 <div class="d-flex flex-column justify-content-center">
   <div class="container border border-secondary rounded p-0 my-4">
     <div id="header" class="p-2">
-      <span>PDF converters</span>
+      <span>PDF converter</span>
       <span *ngIf="signalRS.connected" class="connection-status-on float-right">Connected</span>
       <span *ngIf="!signalRS.connected" class="connection-status-off float-right">Disconnected</span>
     </div>
 
     <div class="container p-0 my-4 px-3">
       <div class="rounded" id="big-button" (click)="file.click()">
-        Select PDF filess
+        Select PDF files to OCR
       </div>
 
       <form [formGroup]="form">
@@ -16,6 +16,7 @@
         <!--<button (click)="file.click()">Select pdf files</button>-->
         <ng-container #container></ng-container>
         <span [matTooltip]="!signalRS.connected ? 'You must connect to the server' : 'Send PDF files'" matTooltipPosition="left"><button id="send-button" mat-flat-button (click)="onSubmit()" *ngIf="FilesContainer.length > 0 || fileComponents.length > 0" [disabled]="parsing || !signalRS.connected || areAllParsed" >Send</button></span>
+        <!--<span [matTooltip]="!signalRS.connected ? 'You must connect to the server' : 'Send PDF files'" matTooltipPosition="left"><button id="send-button" mat-flat-button (click)="onSubmit()" *ngIf="FilesContainer.length > 0 || fileComponents.length > 0">Send</button></span>-->
         <span matTooltip="Clear file queue" matTooltipPosition="right" class="float-right"><button id="clear-button" mat-flat-button (click)="onClear()" *ngIf="FilesContainer.length > 0 && !parsing" >Clear</button></span>
         <span matTooltip="Clear file queue" matTooltipPosition="right" class="float-right"><button id="cancel-button" mat-flat-button (click)="onStop()" *ngIf="FilesContainer.length > 0 && parsing" >Cancel</button></span>
         <span></span>

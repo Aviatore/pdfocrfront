@@ -1,5 +1,7 @@
 export const Urls = {
-  SendFiles: 'http://localhost:5000/ocr/getfile'
-  // SendFiles: 'https://localhost:5001/ocr/getfile'
-  /*SendFiles: 'back:5000/ocr/getfile'*/
-}
+  // for local run
+  // SendFiles: 'http://localhost:5000/ocr/getfile'
+
+  // for docker
+  SendFiles: 'http://localhost:4200/ocr/getfile'
+};
