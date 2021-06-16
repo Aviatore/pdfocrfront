@@ -15,10 +15,10 @@ export class SignalRService {
   constructor() {
     this.connection = new sr.HubConnectionBuilder()
       // for local run
-      // .withUrl('http://localhost:5000/notify')
+      .withUrl('http://localhost:5000/notify')
 
       // for docker
-      .withUrl('http://localhost:4200/notify')
+      // .withUrl('http://localhost:4200/notify')
       .build();
 
     this.connection.onclose(() => {
